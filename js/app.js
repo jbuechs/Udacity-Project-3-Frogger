@@ -1,3 +1,16 @@
+//Adding sound objects using the howler library
+var splash_sound = new Howl({
+    urls: ['sounds/splash.mp3', 'sounds/splash.ogg', 'sounds/splash.wav']
+});
+
+var move_sound = new Howl({
+    urls: ['sounds/move.mp3', 'sounds/move.ogg', 'sounds/move.wav']
+});
+
+var collision_sound = new Howl({
+    urls: ['sounds/collision.mp3', 'sounds/collision.ogg', 'sounds/collision.wav']
+});
+
 //Helper function to generate random integers
 function getRandomInt(min, max) {
   	return Math.floor(Math.random() * (max - min)) + min;
@@ -55,6 +68,7 @@ Player.prototype.reset = function() {
 Player.prototype.update = function() {
 	if(this.checkCollisions()) {
 		this.reset();
+        collision_sound.play();
 	}
 }
 
@@ -68,13 +82,16 @@ Player.prototype.handleInput = function(key) {
             if (this.col > 0) {
                 this.col--;
                 this.x = colX[this.col];
+                move_sound.play();
             }
             break;
         case 'up':
             if (this.row > 0) {
                 this.row--;
                 this.y = rowY[this.row];
+                move_sound.play();
             } else {
+                splash_sound.play();
             	this.reset();
             }
             break;
@@ -82,12 +99,14 @@ Player.prototype.handleInput = function(key) {
             if (this.col < colX.length - 1) {
                 this.col++;
                 this.x = colX[this.col];
+                move_sound.play();
             }
             break;
         case 'down':
             if (this.row < rowY.length - 1) {
                 this.row++;
                 this.y = rowY[this.row];
+                move_sound.play();
             }
             break;
     }
