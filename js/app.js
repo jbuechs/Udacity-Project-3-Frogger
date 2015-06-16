@@ -10,7 +10,7 @@ var splash_sound = new Howl({
     });
 
 //Adding timer to game
-var seconds = 120;
+var seconds = 40;
 var timer_handler = function() {
 //code for the timer
     seconds--;
@@ -22,11 +22,28 @@ function create_timer() {
 }
 
 function timer_update() {
-    context.beginPath();
-    context.rect(x, y, w, h);
-    context.closePath();
-    context.fillStyle = "white";
-    context.fill();
+    //Draws white rectangle on the right side of the canvas
+    ctx.beginPath();
+    ctx.rect(505, 0, 110, 660);
+    ctx.closePath();
+    ctx.fillStyle = "white";
+    ctx.fill();
+    if (seconds === 0) {
+        //some kind of fail
+        clearInterval(intervalVar);
+        return;
+    }
+    ctx.font = "20px Arial";
+    ctx.fillStyle = "Black";
+    ctx.fillText("Time left:", 506, 100);
+    if (seconds <= 30 && seconds > 5) {
+        ctx.fillStyle = "Orange";
+    }
+    if (seconds =< 5) {
+        ctx.fillStyle = "Red";
+    }
+    ctx.fillText(seconds, 506, 200);
+
 }
 
 //Helper function to generate random integers

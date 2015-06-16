@@ -25,7 +25,7 @@ var Engine = (function(global) {
         ctx = canvas.getContext('2d'),
         lastTime;
 
-    canvas.width = 606;
+    canvas.width = 808;
     canvas.height = 606;
     doc.body.appendChild(canvas);
 
@@ -139,6 +139,7 @@ var Engine = (function(global) {
 
 
         renderEntities();
+        renderExtras();
     }
 
     /* This function is called by the render function and is called on each game
@@ -160,6 +161,11 @@ var Engine = (function(global) {
      * handle game reset states - maybe a new game menu or a game over screen
      * those sorts of things. It's only called once by the init() method.
      */
+
+    function renderExtras() {
+        timer_update();
+    }
+
     function reset() {
         // noop
     }
