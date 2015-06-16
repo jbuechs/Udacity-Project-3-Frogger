@@ -1,15 +1,33 @@
 //Adding sound objects using the howler library
 var splash_sound = new Howl({
-    urls: ['sounds/splash.mp3', 'sounds/splash.ogg', 'sounds/splash.wav']
-});
+        urls: ['sounds/splash.mp3', 'sounds/splash.ogg', 'sounds/splash.wav']
+    }),
+    move_sound = new Howl({
+        urls: ['sounds/move.mp3', 'sounds/move.ogg', 'sounds/move.wav']
+    }),
+    collision_sound = new Howl({
+        urls: ['sounds/collision.mp3', 'sounds/collision.ogg', 'sounds/collision.wav']
+    });
 
-var move_sound = new Howl({
-    urls: ['sounds/move.mp3', 'sounds/move.ogg', 'sounds/move.wav']
-});
+//Adding timer to game
+var seconds = 120;
+var timer_handler = function() {
+//code for the timer
+    seconds--;
+    console.log(seconds);
+}
 
-var collision_sound = new Howl({
-    urls: ['sounds/collision.mp3', 'sounds/collision.ogg', 'sounds/collision.wav']
-});
+function create_timer() {
+    intervalVar = setInterval(timer_handler, 1000);
+}
+
+function timer_update() {
+    context.beginPath();
+    context.rect(x, y, w, h);
+    context.closePath();
+    context.fillStyle = "white";
+    context.fill();
+}
 
 //Helper function to generate random integers
 function getRandomInt(min, max) {
