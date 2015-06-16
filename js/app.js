@@ -14,7 +14,6 @@ var seconds = 40;
 var timer_handler = function() {
 //code for the timer
     seconds--;
-    console.log(seconds);
 }
 
 function create_timer() {
@@ -23,11 +22,8 @@ function create_timer() {
 
 function timer_update() {
     //Draws white rectangle on the right side of the canvas
-    ctx.beginPath();
-    ctx.rect(505, 0, 110, 660);
-    ctx.closePath();
     ctx.fillStyle = "white";
-    ctx.fill();
+    ctx.fillRect(505, 0, 110, 660);
     if (seconds === 0) {
         //some kind of fail
         clearInterval(intervalVar);
@@ -39,7 +35,7 @@ function timer_update() {
     if (seconds <= 30 && seconds > 5) {
         ctx.fillStyle = "Orange";
     }
-    if (seconds =< 5) {
+    if (seconds <= 5) {
         ctx.fillStyle = "Red";
     }
     ctx.fillText(seconds, 506, 200);
