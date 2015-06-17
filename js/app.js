@@ -25,13 +25,13 @@ function timer_update() {
     ctx.fillStyle = "white";
     ctx.fillRect(505, 0, 110, 660);
     if (seconds === 0) {
-        //some kind of fail
+        //TODO: add some kind of fail
         clearInterval(intervalVar);
         return;
     }
     ctx.font = "20px Arial";
     ctx.fillStyle = "Black";
-    ctx.fillText("Time left:", 506, 100);
+    ctx.fillText("Time left:", 506, 175);
     if (seconds <= 30 && seconds > 5) {
         ctx.fillStyle = "Orange";
     }
@@ -41,6 +41,38 @@ function timer_update() {
     ctx.fillText(seconds, 506, 200);
 
 }
+
+//Create second level
+var levelUp = function() {
+    if (seconds <= 30) {
+        maxRow = 4;
+        return true;
+    }
+    else {
+        return false;
+    }
+}
+
+function level_update() {
+    ctx.font = "20px Arial";
+    ctx.fillStyle = "Black";
+    if (levelUp()) {
+        ctx.fillText("Level 2", 506, 100);
+    } else {
+        ctx.fillText("Level 1", 506, 100);
+    }
+}
+
+//Create scoring
+var score = 0;
+
+function score_update() {
+    ctx.font = "20px Arial";
+    ctx.fillStyle = "Black";
+    ctx.fillText("Score:", 506, 300);
+    ctx.fillText(score, 580, 300);
+}
+
 
 //Helper function to generate random integers
 function getRandomInt(min, max) {
@@ -60,7 +92,7 @@ var Enemy = function() {
 Enemy.prototype.reset = function() {
 	this.x = getRandomInt(-200, -80);
     this.speed = getRandomInt(50, 250);
-    this.y = rowY[getRandomInt(0, 3)];
+    this.y = rowY[getRandomInt(0, maxRow)];
 }
 
 // Update the enemy's position, required method for game
@@ -97,7 +129,7 @@ Player.prototype.reset = function() {
 }
 
 Player.prototype.update = function() {
-	if(this.checkCollisions()) {
+	if(this.checkEnemyCollisions()) {
 		this.reset();
         collision_sound.play();
 	}
@@ -143,9 +175,9 @@ Player.prototype.handleInput = function(key) {
     }
 }
 
-Player.prototype.checkCollisions = function() {
+Player.prototype.checkEnemyCollisions = function() {
     for (var i = 0; i < allEnemies.length; i++) {
-	    if (player.y == allEnemies[i].y &&
+	    if (player.y === allEnemies[i].y &&
 	    	player.x >= allEnemies[i].x - 80 &&
 	    	player.x <= allEnemies[i].x + 80) {
 	        return true;
@@ -157,12 +189,13 @@ Player.prototype.checkCollisions = function() {
 // Now instantiate your objects.
 // Place all enemy objects in an array called allEnemies
 // Place the player object in a variable called player
-var rowY = [51, 132, 213, 294, 375];
-var colX = [0, 101, 202, 303, 404];
-var enemy1 = new Enemy();
-var enemy2 = new Enemy();
-var allEnemies = [enemy1, enemy2];
-var player = new Player();
+var rowY = [51, 132, 213, 294, 375],
+    colX = [0, 101, 202, 303, 404],
+    maxRow = 3,
+    enemy1 = new Enemy(),
+    enemy2 = new Enemy(),
+    allEnemies = [enemy1, enemy2],
+    player = new Player();
 
 
 // This listens for key presses and sends the keys to your

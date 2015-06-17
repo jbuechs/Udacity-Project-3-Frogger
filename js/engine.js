@@ -120,6 +120,10 @@ var Engine = (function(global) {
             numCols = 5,
             row, col;
 
+        if (levelUp()) {
+            rowImages[4] = 'images/stone-block.png';
+        }
+
         /* Loop through the number of rows and columns we've defined above
          * and, using the rowImages array, draw the correct image for that
          * portion of the "grid"
@@ -164,6 +168,8 @@ var Engine = (function(global) {
 
     function renderExtras() {
         timer_update();
+        level_update();
+        score_update();
     }
 
     function reset() {
