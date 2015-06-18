@@ -66,6 +66,7 @@ var Engine = (function(global) {
     function init() {
         reset();
         create_timer();
+        create_spawn_timer();
         lastTime = Date.now();
         main();
     }

@@ -138,6 +138,17 @@ Enemy.prototype.render = function() {
     ctx.drawImage(Resources.get(this.sprite), this.x, this.y);
 }
 
+//Spawn a new enemy every 15 seconds
+var spawn_handler = function() {
+//code for spawning a new enemy
+    var newEnemy = new Enemy();
+    allEnemies.push(newEnemy);
+}
+
+function create_spawn_timer() {
+    intervalVar = setInterval(spawn_handler, 10000);
+}
+
 // Now write your own player class
 // This class requires an update(), render() and
 // a handleInput() method.
@@ -233,13 +244,14 @@ var rowY = [51, 132, 213, 294, 375],
     colX = [0, 101, 202, 303, 404],
     maxRow = 3,
     gem = new Gem(),
-    enemy1 = new Enemy(),
-    enemy2 = new Enemy(),
-    enemy3 = new Enemy(),
-    enemy4 = new Enemy(),
-    allEnemies = [enemy1, enemy2, enemy3, enemy4],
+    allEnemies = [];
+    allGems = [];
     player = new Player();
 
+for (var i = 0; i < 5; i++) {
+    var newEnemy = new Enemy();
+    allEnemies.push(newEnemy);
+}
 
 // This listens for key presses and sends the keys to your
 // Player.handleInput() method. You don't need to modify this.
