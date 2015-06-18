@@ -67,6 +67,7 @@ var Engine = (function(global) {
         reset();
         create_timer();
         create_spawn_timer();
+        create_gem_timer();
         lastTime = Date.now();
         main();
     }
@@ -173,7 +174,9 @@ var Engine = (function(global) {
     }
 
     function renderGems() {
-        gem.update();
+        allGems.forEach(function(gem) {
+            gem.update();
+        });
     }
 
     function reset() {

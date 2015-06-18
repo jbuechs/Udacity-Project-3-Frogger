@@ -79,8 +79,21 @@ var Gem = function() {
 }
 
 Gem.prototype.reset = function() {
-    this.x = colX[getRandomInt(0, 4)]
-    this.y = rowY[getRandomInt(1, maxRow)];
+    this.x = colX[getRandomInt(0, 5)];
+    this.y = rowY[getRandomInt(0, maxRow)];
+/*
+At this point in the program, I want to check to see whether there is already a gem
+at this location. I have created this check_repeat function which I have tested in the
+console and it works as I wanted - returns true if there is already a gem in that location
+and false if there is not. The while loop is throwing an error. I think it has something to
+do with the allGems array - maybe it's not defined yet, maybe something to do with scope?
+I thought allGems was in the global scope but when I try to access it I get an error.
+Not sure. Confused. Would appreciate help!
+
+    while (this.check_repeat(allGems)) {
+        this.reset();
+    }
+*/
 }
 
 Gem.prototype.update = function() {
@@ -89,6 +102,35 @@ Gem.prototype.update = function() {
 
 Gem.prototype.render = function() {
     ctx.drawImage(Resources.get(this.sprite), this.x + 10, this.y + 60, 80, 100);
+}
+
+//Checks if this gem is on the same space as other gems
+/*
+Should be called in the gem reset function
+//I originally just had allGems in the function but I got an error that it wasn't
+defined so I included allGems as a parameter. I don't understand why I couldn't
+access allGems because it is a global object. Probably has to do with scope...
+*/
+Gem.prototype.check_repeat = function(allGems) {
+    for (var i = 0; i < allGems.length; i++) {
+        if (this !== allGems[i] &&
+            this.x === allGems[i].x &&
+            this.y === allGems[i].y) {
+            return true;
+        }
+    }
+    return false;
+}
+
+//Spawn a new gem every 10 seconds
+var gem_handler = function() {
+//code for spawning a new enemy
+    var newGem = new Gem();
+    allGems.push(newGem);
+}
+
+function create_gem_timer() {
+    intervalVar = setInterval(gem_handler, 10000);
 }
 
 //Add lives
@@ -107,10 +149,6 @@ function score_update() {
 
 // Enemies our player must avoid
 var Enemy = function() {
-    // Variables applied to each of our instances go here,
-    // we've provided one for you to get started
-    // The image/sprite for our enemies, this uses
-    // a helper we've provided to easily load images
     this.reset();
     this.sprite = 'images/enemy-bug.png';
 }
@@ -124,9 +162,6 @@ Enemy.prototype.reset = function() {
 // Update the enemy's position, required method for game
 // Parameter: dt, a time delta between ticks
 Enemy.prototype.update = function(dt) {
-    // You should multiply any movement by the dt parameter
-    // which will ensure the game runs at the same speed for
-    // all computers.
     this.x = this.x + this.speed * dt;
     if (this.x > 505) {
     	this.reset();
@@ -138,9 +173,8 @@ Enemy.prototype.render = function() {
     ctx.drawImage(Resources.get(this.sprite), this.x, this.y);
 }
 
-//Spawn a new enemy every 15 seconds
+//Spawn a new enemy every 10 seconds
 var spawn_handler = function() {
-//code for spawning a new enemy
     var newEnemy = new Enemy();
     allEnemies.push(newEnemy);
 }
@@ -149,10 +183,7 @@ function create_spawn_timer() {
     intervalVar = setInterval(spawn_handler, 10000);
 }
 
-// Now write your own player class
-// This class requires an update(), render() and
-// a handleInput() method.
-
+//Player Class
 var Player = function() {
     this.reset();
     this.sprite = 'images/char-pink-girl.png';
@@ -172,7 +203,6 @@ Player.prototype.update = function() {
 	}
     if(this.checkGemCollisions()) {
         score += 50;
-        gem.reset();
         gem_sound.play();
     }
 }
@@ -229,12 +259,14 @@ Player.prototype.checkEnemyCollisions = function() {
 }
 
 Player.prototype.checkGemCollisions = function() {
-    if (player.y === gem.y &&
-            player.x >= gem.x - 80 &&
-            player.x <= gem.x + 80) {
+    for (var i = 0; i < allGems.length; i++)
+    if (player.y === allGems[i].y &&
+            player.x >= allGems[i].x - 80 &&
+            player.x <= allGems[i].x + 80) {
+            allGems[i].reset();
             return true;
     }
-    return false;
+    return 0;
 }
 
 // Now instantiate your objects.
@@ -245,7 +277,7 @@ var rowY = [51, 132, 213, 294, 375],
     maxRow = 3,
     gem = new Gem(),
     allEnemies = [];
-    allGems = [];
+    allGems = [gem];
     player = new Player();
 
 for (var i = 0; i < 5; i++) {
