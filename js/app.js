@@ -7,6 +7,9 @@ var splash_sound = new Howl({
     }),
     collision_sound = new Howl({
         urls: ['sounds/collision.mp3', 'sounds/collision.ogg', 'sounds/collision.wav']
+    })
+    gem_sound = new Howl({
+        urls: ['sounds/gem.mp3', 'sounds/gem.ogg', 'sounds/gem.wav']
     });
 
 //Adding timer to game
@@ -63,6 +66,35 @@ function level_update() {
     }
 }
 
+
+//Helper function to generate random integers
+function getRandomInt(min, max) {
+    return Math.floor(Math.random() * (max - min)) + min;
+}
+
+//Add gems
+var Gem = function() {
+    this.sprite = 'images/Gem Blue.png';
+    this.reset();
+}
+
+Gem.prototype.reset = function() {
+    this.x = colX[getRandomInt(0, 4)]
+    this.y = rowY[getRandomInt(1, maxRow)];
+}
+
+Gem.prototype.update = function() {
+    this.render();
+}
+
+Gem.prototype.render = function() {
+    ctx.drawImage(Resources.get(this.sprite), this.x + 10, this.y + 60, 80, 100);
+}
+
+//Add lives
+var lives = 3;
+
+
 //Create scoring
 var score = 0;
 
@@ -71,12 +103,6 @@ function score_update() {
     ctx.fillStyle = "Black";
     ctx.fillText("Score:", 506, 300);
     ctx.fillText(score, 580, 300);
-}
-
-
-//Helper function to generate random integers
-function getRandomInt(min, max) {
-  	return Math.floor(Math.random() * (max - min)) + min;
 }
 
 // Enemies our player must avoid
@@ -133,6 +159,11 @@ Player.prototype.update = function() {
 		this.reset();
         collision_sound.play();
 	}
+    if(this.checkGemCollisions()) {
+        score += 50;
+        gem.reset();
+        gem_sound.play();
+    }
 }
 
 Player.prototype.render = function() {
@@ -186,15 +217,27 @@ Player.prototype.checkEnemyCollisions = function() {
 	return false;
 }
 
+Player.prototype.checkGemCollisions = function() {
+    if (player.y === gem.y &&
+            player.x >= gem.x - 80 &&
+            player.x <= gem.x + 80) {
+            return true;
+    }
+    return false;
+}
+
 // Now instantiate your objects.
 // Place all enemy objects in an array called allEnemies
 // Place the player object in a variable called player
 var rowY = [51, 132, 213, 294, 375],
     colX = [0, 101, 202, 303, 404],
     maxRow = 3,
+    gem = new Gem(),
     enemy1 = new Enemy(),
     enemy2 = new Enemy(),
-    allEnemies = [enemy1, enemy2],
+    enemy3 = new Enemy(),
+    enemy4 = new Enemy(),
+    allEnemies = [enemy1, enemy2, enemy3, enemy4],
     player = new Player();
 
 

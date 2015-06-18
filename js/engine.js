@@ -140,8 +140,7 @@ var Engine = (function(global) {
                 ctx.drawImage(Resources.get(rowImages[row]), col * 101, row * 83);
             }
         }
-
-
+        renderGems();
         renderEntities();
         renderExtras();
     }
@@ -172,6 +171,10 @@ var Engine = (function(global) {
         score_update();
     }
 
+    function renderGems() {
+        gem.update();
+    }
+
     function reset() {
         // noop
     }
@@ -185,7 +188,8 @@ var Engine = (function(global) {
         'images/water-block.png',
         'images/grass-block.png',
         'images/enemy-bug.png',
-        'images/char-pink-girl.png'
+        'images/char-pink-girl.png',
+        'images/Gem Blue.png',
     ]);
     Resources.onReady(init);
 
