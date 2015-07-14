@@ -13,41 +13,43 @@ var splash_sound = new Howl({
     });
 
 //Adding timer to game
-var seconds = 40;
-var timer_handler = function() {
-//code for the timer
-    seconds--;
+
+var Timer = function(seconds) {
+    this.seconds = seconds;
 }
 
-function create_timer() {
-    intervalVar = setInterval(timer_handler, 1000);
+Timer.prototype.timer_handler = function() {
+    this.seconds--;
 }
 
-function timer_update() {
+Timer.prototype.create_timer = function() {
+    this.intervalVar = setInterval(this.timer_handler.bind(this), 1000);
+}
+
+Timer.prototype.timer_update = function() {
     //Draws white rectangle on the right side of the canvas
     ctx.fillStyle = "white";
     ctx.fillRect(505, 0, 110, 660);
-    if (seconds === 0) {
+    if (this.seconds === 0) {
         //TODO: add some kind of fail
-        clearInterval(intervalVar);
+        clearInterval(this.intervalVar);
         return;
     }
     ctx.font = "20px Arial";
     ctx.fillStyle = "Black";
     ctx.fillText("Time left:", 506, 175);
-    if (seconds <= 30 && seconds > 5) {
+    if (this.seconds <= 30 && this.seconds > 5) {
         ctx.fillStyle = "Orange";
     }
-    if (seconds <= 5) {
+    if (this.seconds <= 5) {
         ctx.fillStyle = "Red";
     }
-    ctx.fillText(seconds, 506, 200);
-
+    ctx.fillText(this.seconds, 506, 200);
 }
 
 //Create second level
 var levelUp = function() {
-    if (seconds <= 30) {
+    if (timer.seconds <= 30) {
         maxRow = 4;
         return true;
     }
@@ -275,6 +277,7 @@ Player.prototype.checkGemCollisions = function() {
 var rowY = [51, 132, 213, 294, 375],
     colX = [0, 101, 202, 303, 404],
     maxRow = 3,
+    timer = new Timer(40),
     gem = new Gem(),
     allEnemies = [];
     allGems = [gem];

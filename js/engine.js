@@ -65,7 +65,7 @@ var Engine = (function(global) {
      */
     function init() {
         reset();
-        create_timer();
+        timer.create_timer();
         create_spawn_timer();
         create_gem_timer();
         lastTime = Date.now();
@@ -168,7 +168,7 @@ var Engine = (function(global) {
      */
 
     function renderExtras() {
-        timer_update();
+        timer.timer_update();
         level_update();
         score_update();
     }
