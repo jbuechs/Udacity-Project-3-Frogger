@@ -23,6 +23,8 @@ var Engine = (function(global) {
         win = global.window,
         canvas = doc.createElement('canvas'),
         ctx = canvas.getContext('2d'),
+        timeOver = false,
+        noLives = false,
         lastTime;
 
     canvas.width = 808;
@@ -56,7 +58,12 @@ var Engine = (function(global) {
         /* Use the browser's requestAnimationFrame function to call this
          * function again as soon as the browser is able to draw another frame.
          */
-        win.requestAnimationFrame(main);
+        if (!timeOver && !noLives) {
+            win.requestAnimationFrame(main);
+        }
+        else {
+            ctx.drawImage(Resources.get('images/GameOver.png'), 0, 150);
+        }
     };
 
     /* This function does some initial setup that should only occur once,
@@ -97,7 +104,7 @@ var Engine = (function(global) {
         allEnemies.forEach(function(enemy) {
             enemy.update(dt);
         });
-        player.update();
+        noLives = player.update();
     }
 
     /* This function initially draws the "game level", it will then call
@@ -143,6 +150,7 @@ var Engine = (function(global) {
             }
         }
         renderGems();
+        renderHearts();
         renderEntities();
         renderExtras();
     }
@@ -158,7 +166,6 @@ var Engine = (function(global) {
         allEnemies.forEach(function(enemy) {
             enemy.render();
         });
-
         player.render();
     }
 
@@ -168,7 +175,7 @@ var Engine = (function(global) {
      */
 
     function renderExtras() {
-        timer.timer_update();
+        timeOver = timer.timer_update();
         level_update();
         score_update();
     }
@@ -176,6 +183,12 @@ var Engine = (function(global) {
     function renderGems() {
         allGems.forEach(function(gem) {
             gem.update();
+        });
+    }
+
+    function renderHearts() {
+        allHearts.forEach(function(heart) {
+            heart.update();
         });
     }
 
@@ -194,6 +207,9 @@ var Engine = (function(global) {
         'images/enemy-bug.png',
         'images/char-pink-girl.png',
         'images/Gem Blue.png',
+        'images/heart_lives_small.png',
+        'images/Heart.png',
+        'images/GameOver.png'
     ]);
     Resources.onReady(init);
 

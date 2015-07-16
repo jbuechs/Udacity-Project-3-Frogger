@@ -29,11 +29,11 @@ Timer.prototype.create_timer = function() {
 Timer.prototype.timer_update = function() {
     //Draws white rectangle on the right side of the canvas
     ctx.fillStyle = "white";
-    ctx.fillRect(505, 0, 110, 660);
+    ctx.fillRect(505, 0, 110, 475);
     if (this.seconds === 0) {
         //TODO: add some kind of fail
         clearInterval(this.intervalVar);
-        return;
+        return true;
     }
     ctx.font = "20px Arial";
     ctx.fillStyle = "Black";
@@ -45,11 +45,12 @@ Timer.prototype.timer_update = function() {
         ctx.fillStyle = "Red";
     }
     ctx.fillText(this.seconds, 506, 200);
+    return false;
 }
 
 //Create second level
 var levelUp = function() {
-    if (timer.seconds <= 30) {
+    if (timer.seconds <= 60) {
         maxRow = 4;
         return true;
     }
@@ -72,6 +73,25 @@ function level_update() {
 //Helper function to generate random integers
 function getRandomInt(min, max) {
     return Math.floor(Math.random() * (max - min)) + min;
+}
+
+//Add hearts
+var Heart = function() {
+    this.sprite = 'images/Heart.png'
+    this.reset();
+}
+
+Heart.prototype.reset = function() {
+    this.x = colX[getRandomInt(0, 5)];
+    this.y = rowY[getRandomInt(0, maxRow)];
+}
+
+Heart.prototype.update = function() {
+    this.render();
+}
+
+Heart.prototype.render = function() {
+    ctx.drawImage(Resources.get(this.sprite), this.x + 10, this.y + 60, 80, 100);
 }
 
 //Add gems
@@ -135,10 +155,6 @@ function create_gem_timer() {
     intervalVar = setInterval(gem_handler, 10000);
 }
 
-//Add lives
-var lives = 3;
-
-
 //Create scoring
 var score = 0;
 
@@ -186,9 +202,11 @@ function create_spawn_timer() {
 }
 
 //Player Class
+
 var Player = function() {
     this.reset();
     this.sprite = 'images/char-pink-girl.png';
+    this.lives = 3;
 }
 
 Player.prototype.reset = function() {
@@ -202,15 +220,38 @@ Player.prototype.update = function() {
 	if(this.checkEnemyCollisions()) {
 		this.reset();
         collision_sound.play();
+        if (this.lives === 0) {
+            return true;
+        }
 	}
     if(this.checkGemCollisions()) {
         score += 50;
         gem_sound.play();
+        if (score % 250 === 0) {
+            var newHeart = new Heart();
+            allHearts.push(newHeart);
+        }
     }
+    if (this.checkHeartCollisions()) {
+        if (this.lives < 5) {
+                this.lives++;
+        }
+    }
+    return false;
+}
+
+Player.prototype.lives_render = function() {
+    ctx.fillStyle = "white";
+    ctx.fillRect(505, 480, 700, 550);
+    ctx.font = "20px Arial";
+    ctx.fillStyle = "Black";
+    ctx.fillText("Lives:", 506, 500);
+    ctx.drawImage(Resources.get('images/heart_lives_small.png'), 0, 0, this.lives * 20, 20, 506, 500, this.lives * 20, 20)
 }
 
 Player.prototype.render = function() {
     ctx.drawImage(Resources.get(this.sprite), this.x, this.y);
+    this.lives_render();
 }
 
 Player.prototype.handleInput = function(key) {
@@ -229,6 +270,7 @@ Player.prototype.handleInput = function(key) {
                 move_sound.play();
             } else {
                 splash_sound.play();
+                this.lives--;
             	this.reset();
             }
             break;
@@ -254,7 +296,8 @@ Player.prototype.checkEnemyCollisions = function() {
 	    if (player.y === allEnemies[i].y &&
 	    	player.x >= allEnemies[i].x - 80 &&
 	    	player.x <= allEnemies[i].x + 80) {
-	        return true;
+                this.lives--;
+	            return true;
 	    }
 	}
 	return false;
@@ -271,16 +314,28 @@ Player.prototype.checkGemCollisions = function() {
     return 0;
 }
 
+Player.prototype.checkHeartCollisions = function() {
+    for (var i = 0; i < allHearts.length; i++)
+    if (player.y === allHearts[i].y &&
+            player.x >= allHearts[i].x - 80 &&
+            player.x <= allHearts[i].x + 80) {
+            allHearts[i].reset();
+            return true;
+    }
+    return 0;
+}
+
 // Now instantiate your objects.
 // Place all enemy objects in an array called allEnemies
 // Place the player object in a variable called player
 var rowY = [51, 132, 213, 294, 375],
     colX = [0, 101, 202, 303, 404],
     maxRow = 3,
-    timer = new Timer(40),
+    timer = new Timer(120),
     gem = new Gem(),
-    allEnemies = [];
-    allGems = [gem];
+    allEnemies = [],
+    allHearts = [],
+    allGems = [gem],
     player = new Player();
 
 for (var i = 0; i < 5; i++) {
