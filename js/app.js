@@ -144,7 +144,7 @@ Gem.prototype.check_repeat = function(allGems) {
     return false;
 }
 
-//Spawn a new gem every 10 seconds
+//Spawn a new gem every 15 seconds
 var gem_handler = function() {
 //code for spawning a new enemy
     var newGem = new Gem();
@@ -152,7 +152,7 @@ var gem_handler = function() {
 }
 
 function create_gem_timer() {
-    intervalVar = setInterval(gem_handler, 10000);
+    intervalVar = setInterval(gem_handler, 15000);
 }
 
 //Create scoring
@@ -191,14 +191,14 @@ Enemy.prototype.render = function() {
     ctx.drawImage(Resources.get(this.sprite), this.x, this.y);
 }
 
-//Spawn a new enemy every 10 seconds
+//Spawn a new enemy every 20 seconds
 var spawn_handler = function() {
     var newEnemy = new Enemy();
     allEnemies.push(newEnemy);
 }
 
 function create_spawn_timer() {
-    intervalVar = setInterval(spawn_handler, 10000);
+    intervalVar = setInterval(spawn_handler, 20000);
 }
 
 //Player Class
@@ -227,7 +227,7 @@ Player.prototype.update = function() {
     if(this.checkGemCollisions()) {
         score += 50;
         gem_sound.play();
-        if (score % 250 === 0) {
+        if (score % 250 === 0 && allHearts.length < 3) {
             var newHeart = new Heart();
             allHearts.push(newHeart);
         }
@@ -291,6 +291,20 @@ Player.prototype.handleInput = function(key) {
     }
 }
 
+/*
+Attempt to refactor code to have one collision function. Not working yet.
+Player.prototype.checkCollisions = function(objArray) {
+    for (var i = 0; i < objArray.length; i++) {
+        if (player.y === objArray[i].y &&
+            player.x >= objArray[i].x - 80 &&
+            player.x <= allEnemies[i].x + 80) {
+            return i;
+        }
+    }
+    return -1;
+}
+*/
+
 Player.prototype.checkEnemyCollisions = function() {
     for (var i = 0; i < allEnemies.length; i++) {
 	    if (player.y === allEnemies[i].y &&
@@ -338,7 +352,7 @@ var rowY = [51, 132, 213, 294, 375],
     allGems = [gem],
     player = new Player();
 
-for (var i = 0; i < 5; i++) {
+for (var i = 0; i < 4; i++) {
     var newEnemy = new Enemy();
     allEnemies.push(newEnemy);
 }
