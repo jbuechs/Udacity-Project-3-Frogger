@@ -63,6 +63,7 @@ var Engine = (function(global) {
         }
         else {
             ctx.drawImage(Resources.get('images/GameOver.png'), 0, 150);
+            game_over_sound.play();
         }
     }
 

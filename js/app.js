@@ -10,6 +10,12 @@ var splash_sound = new Howl({
     }),
     gem_sound = new Howl({
         urls: ['sounds/gem.mp3', 'sounds/gem.ogg', 'sounds/gem.wav']
+    }),
+    heart_sound = new Howl( {
+        urls: ['sounds/heart.mp3', 'sounds/heart.ogg', 'sounds/heart.wav']
+    }),
+    game_over_sound = new Howl( {
+        urls: ['sounds/game-over.mp3', 'sounds/game-over.ogg', 'sounds/game-over.wav']
     });
 
 //Adding timer to game
@@ -219,6 +225,7 @@ Player.prototype.update = function() {
 	var enemyCollisions = this.checkCollisions(allEnemies);
     if(enemyCollisions >= 0) {
 		this.reset();
+        this.lives--;
         collision_sound.play();
         if (this.lives === 0) {
             return true;
@@ -236,6 +243,7 @@ Player.prototype.update = function() {
     }
     var heartCollision = this.checkCollisions(allHearts);
     if (heartCollision >=0) {
+        heart_sound.play();
         allHearts[heartCollision].reset();
         if (this.lives < 5) {
                 this.lives++;
@@ -295,9 +303,6 @@ Player.prototype.handleInput = function(key) {
     }
 };
 
-/*
-Attempt to refactor code to have one collision function. Not working yet.
-*/
 Player.prototype.checkCollisions = function(objArray) {
     for (var i = 0, len = objArray.length; i < len; i++) {
         if (this.y === objArray[i].y &&
