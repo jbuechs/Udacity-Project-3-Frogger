@@ -2,6 +2,7 @@ frontend-nanodegree-arcade-game
 ===============================
 #How to access the game
 There a few different ways to access my game:
+
 1. Clone the game repository at https://github.com/jbuechs/Udacity-Project-3-Frogger.git and open index.html
 2. Go to http://jbuechs.github.io/Udacity-Project-3-Frogger/
 
@@ -31,7 +32,7 @@ I created this Frogger-style arcade game for the Udacity Front End Web Developer
 Adding sound to the game turned out to be more complicated than I expected. I did a lot of research on possible approaches and decided to use a javascript library, [Howler] (http://goldfirestudios.com/blog/104/howler.js-Modern-Web-Audio-Javascript-Library), which allowed me to include the sounds in the game.
 
 ##The Countdown Timer
-I originally programmed the timer in the global scope, but a Udacity coach told me that it would be cleaner to make the timer an object. I refactored to make the timer an object and it stopped working. Using a few console.log()s, I could pinpoint where the time variable was undefined, but I did not understand why. It took a good deal of research, but I [found that the setInterval method binds *this* to the global scope]. (https://developer.mozilla.org/en-US/docs/Web/API/WindowTimers/setInterval#The_this_problem) I was able to fix this with some snazzy code:
+I originally programmed the timer in the global scope, but a Udacity coach told me that it would be cleaner to make the timer an object. I refactored to make the timer an object and it stopped working. Using a few console.log()s, I could pinpoint where the time variable was undefined, but I did not understand why. It took a good deal of research, but I found that the [setInterval method](https://developer.mozilla.org/en-US/docs/Web/API/WindowTimers/setInterval#The_this_problem) binds *this* to the global scope.  I was able to fix this with some snazzy code:
 ```
 Timer.prototype.create_timer = function() {
     this.intervalVar = setInterval(this.timer_handler.bind(this), 1000);
