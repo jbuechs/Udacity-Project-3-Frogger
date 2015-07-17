@@ -64,7 +64,7 @@ var Engine = (function(global) {
         else {
             ctx.drawImage(Resources.get('images/GameOver.png'), 0, 150);
         }
-    };
+    }
 
     /* This function does some initial setup that should only occur once,
      * particularly setting the lastTime variable that is required for the
