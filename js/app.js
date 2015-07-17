@@ -16,7 +16,13 @@ var splash_sound = new Howl({
     }),
     game_over_sound = new Howl( {
         urls: ['sounds/game-over.mp3', 'sounds/game-over.ogg', 'sounds/game-over.wav']
-    });
+    }),
+    rowY = [51, 132, 213, 294, 375],
+    colX = [0, 101, 202, 303, 404],
+    maxRow = 3,
+    allEnemies = [],
+    allHearts = [],
+    allGems = [];
 
 //Adding timer to game
 
@@ -116,11 +122,11 @@ and false if there is not. The while loop is throwing an error. I think it has s
 do with the allGems array - maybe it's not defined yet, maybe something to do with scope?
 I thought allGems was in the global scope but when I try to access it I get an error.
 Not sure. Confused. Would appreciate help!
-
+*/
     while (this.check_repeat(allGems)) {
         this.reset();
     }
-*/
+
 };
 
 Gem.prototype.update = function() {
@@ -132,17 +138,11 @@ Gem.prototype.render = function() {
 };
 
 //Checks if this gem is on the same space as other gems
-/*
-Should be called in the gem reset function
-//I originally just had allGems in the function but I got an error that it wasn't
-defined so I included allGems as a parameter. I don't understand why I couldn't
-access allGems because it is a global object. Probably has to do with scope...
-*/
-Gem.prototype.check_repeat = function(allGems) {
-    for (var i = 0, len = allGems.length; i < len; i++) {
-        if (this !== allGems[i] &&
-            this.x === allGems[i].x &&
-            this.y === allGems[i].y) {
+Gem.prototype.check_repeat = function(objArray) {
+    for (var i = 0, len = objArray.length; i < len; i++) {
+        if (this !== objArray[i] &&
+            this.x === objArray[i].x &&
+            this.y === objArray[i].y) {
             return true;
         }
     }
@@ -151,7 +151,6 @@ Gem.prototype.check_repeat = function(allGems) {
 
 //Spawn a new gem every 15 seconds
 var gem_handler = function() {
-//code for spawning a new enemy
     var newGem = new Gem();
     allGems.push(newGem);
 };
@@ -317,13 +316,8 @@ Player.prototype.checkCollisions = function(objArray) {
 // Now instantiate your objects.
 // Place all enemy objects in an array called allEnemies
 // Place the player object in a variable called player
-var rowY = [51, 132, 213, 294, 375],
-    colX = [0, 101, 202, 303, 404],
-    maxRow = 3,
-    timer = new Timer(120),
+var timer = new Timer(120),
     gem = new Gem(),
-    allEnemies = [],
-    allHearts = [],
     allGems = [gem],
     player = new Player();
 
