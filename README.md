@@ -1,11 +1,40 @@
 frontend-nanodegree-arcade-game
 ===============================
+#How to access the game
+There a few different ways to access my game:
+1. Clone the game repository at https://github.com/jbuechs/Udacity-Project-3-Frogger.git and open index.html
+2. Go to http://jbuechs.github.io/Udacity-Project-3-Frogger/
 
-I created this Frogger-style arcade game for the Udacity Front end nanodegree. I attemped to go beyond the minimum requirements by adding:
+#How to play the game
+Use the arrow keys to move the character around the game board while avoiding the killer ladybugs.
 
-- level up
-- timer
-- sounds
-- score
+Careful! She doesn't know how to swim, so running into the water will lose a life.
 
-I learned a lot about object-oriented programming in javascript in this project.
+Collect blue gems to increase your score and generally improve your self-confidence.
+
+As time passes, the ladybugs become more abundant. Luckily, a higher score gives you more life.
+
+#Reflecting on the process
+
+##Trying to be "Udacious"
+I created this Frogger-style arcade game for the Udacity Front End Web Developer Nanodegree. The rubrics for each project have an extra-cool level they call "Udacious," which I always try to achieve. I attemped to go beyond the minimum requirements of the project by adding:
+
+- level up: On level 2, there is an additional row in the game board
+- timer: The game has 120 seconds in it and it ends if the timer gets down to 0
+- sounds: Moving the character, hitting an enemy, splashing into the water, and collecting gems and hearts all make sounds. It probably is annoying and not great game design, but I was more interested in the challenge of coding it.
+- score: Collecting gems adds points to the score.
+- hearts: For every 250 points, you have another heart added to the game board. You cannot have more than 5 hearts. When you reach 0 hearts, the game ends.
+
+#Challenges
+
+##Adding Sounds
+Adding sound to the game turned out to be more complicated than I expected. I did a lot of research on possible approaches and decided to use a javascript library, [Howler] (http://goldfirestudios.com/blog/104/howler.js-Modern-Web-Audio-Javascript-Library), which allowed me to include the sounds in the game.
+
+##The Countdown Timer
+I originally programmed the timer in the global scope, but a Udacity coach told me that it would be cleaner to make the timer an object. I refactored to make the timer an object and it stopped working. Using a few console.log()s, I could pinpoint where the time variable was undefined, but I did not understand why. It took a good deal of research, but I [found that the setInterval method binds *this* to the global scope]. (https://developer.mozilla.org/en-US/docs/Web/API/WindowTimers/setInterval#The_this_problem) I was able to fix this with some snazzy code:
+```
+Timer.prototype.create_timer = function() {
+    this.intervalVar = setInterval(this.timer_handler.bind(this), 1000);
+}
+```
+I consider myself a beginner so I was pretty proud of myself for solving this problem.
