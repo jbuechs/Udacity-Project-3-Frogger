@@ -1,3 +1,32 @@
 body {
     text-align: center;
 }
+/*
+button {
+	text-align: center;
+	margin: auto;
+	color: white;
+    border-radius: 4px;
+    text-shadow: 0 1px 1px rgba(0, 0, 0, 0.2);
+    background: rgb(28, 184, 65);
+}
+*/
+
+.green-button {
+	font-family: inherit;
+	font-size: 100%;
+	padding: .5em 1em;
+	border: 0;
+	vertical-align: middle;
+	text-align: center;
+	cursor: pointer;
+	color: white;
+    border-radius: 4px;
+    text-shadow: 0 1px 1px rgba(0, 0, 0, 0.2);
+	background: rgb(28, 184, 65);
+	transition: all 0.3s ease 0s;
+}
+
+button:hover {
+  background: #3071A9
+}

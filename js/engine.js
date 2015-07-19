@@ -106,6 +106,7 @@ var Engine = (function(global) {
             enemy.update(dt);
         });
         noLives = player.update();
+        console.log(noLives);
     }
 
     /* This function initially draws the "game level", it will then call
@@ -194,8 +195,26 @@ var Engine = (function(global) {
     }
 
     function reset() {
-        // noop
+        player.lives = 3;
+        score = 0;
+        maxRow = 3;
+        allEnemies = [];
+        allHearts = [];
+        gem = new Gem(),
+        allGems = [gem],
+        timer.seconds = 120;
+        for (var i = 0; i < 4; i++) {
+            var newEnemy = new Enemy();
+            allEnemies.push(newEnemy);
+        }
+        timeOver = false;
+        noLives = false;
+        player.reset();
     }
+
+    document.getElementById("button").onclick = function() {
+        init();
+    };
 
     /* Go ahead and load all of the images we know we're going to need to
      * draw our game level. Then set init as the callback method, so that when

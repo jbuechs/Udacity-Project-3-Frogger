@@ -229,6 +229,7 @@ Player.prototype.reset = function() {
     this.y = rowY[this.row];
 };
 
+//@return true if player runs out of lives
 Player.prototype.update = function() {
     // Check enemy collisions
 	var enemyCollisions = this.checkCollisions(allEnemies);
