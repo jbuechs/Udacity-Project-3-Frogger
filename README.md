@@ -25,6 +25,7 @@ I created this Frogger-style arcade game for the Udacity Front End Web Developer
 - sounds: Moving the character, hitting an enemy, splashing into the water, and collecting gems and hearts all make sounds. It probably is annoying and not great game design, but I was more interested in the challenge of coding it.
 - score: Collecting gems adds points to the score.
 - hearts: For every 250 points, you have another heart added to the game board. You cannot have more than 5 hearts. When you reach 0 hearts, the game ends.
+- restart button: Clicking on the button theoretically restarts the game, but this is unfortunately buggy.
 
 #Challenges
 
@@ -39,3 +40,13 @@ Timer.prototype.create_timer = function() {
 }
 ```
 I consider myself a beginner so I was pretty proud of myself for solving this problem.
+
+##Restarting the game
+I tried to introduce a restart button which would enable the player to also have a high score. This unfortunately is buggy and I have yet to figure out what is going on.
+
+A few clues:
+- Running out of lives sometimes ends the game and sometimes does not.
+- When lives === 0, the game over sound plays, but the game sometimes continues to play.
+- When you click restart, the bugs are all supposed to reset and start to the left of the screen. Sometimes, they start from the center (their previous position?)
+
+I hope that someday I'll be able to return to this code and figure out how to fix it. Right now, I'm afraid I have to give up. I've stared at this for so long and the answer has yet to be illuminated.
