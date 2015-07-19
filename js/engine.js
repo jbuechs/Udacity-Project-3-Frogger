@@ -58,12 +58,12 @@ var Engine = (function(global) {
         /* Use the browser's requestAnimationFrame function to call this
          * function again as soon as the browser is able to draw another frame.
          */
-        if (!timeOver && !noLives) {         // Checks to see if game is over
-            win.requestAnimationFrame(main);
-        }
-        else {
+        if (timeOver || noLives) {         // Checks to see if game is over
             ctx.drawImage(Resources.get('images/GameOver.png'), 0, 150);
             game_over_sound.play();
+        }
+        else {
+            win.requestAnimationFrame(main);
         }
     }
 
@@ -74,8 +74,6 @@ var Engine = (function(global) {
     function init() {
         reset();
         timer.create_timer();
-        create_spawn_timer();
-        create_gem_timer();
         lastTime = Date.now();
         main();
     }
@@ -106,8 +104,6 @@ var Engine = (function(global) {
             enemy.update(dt);
         });
         noLives = player.update();
-        //console.log(noLives);
-        //console.log(timeOver);
     }
 
     /* This function initially draws the "game level", it will then call
@@ -204,13 +200,16 @@ var Engine = (function(global) {
         player.lives = 3,
         score = 0,
         maxRow = 3,
-        allEnemies = [],
         allHearts = [],
+        allEnemies = [],
         gem = new Gem(),
         allGems = [gem],
         timer.seconds = 120;
+        reset_gem_timer();
+        reset_enemy_timer();
         for (var i = 0; i < 4; i++) {
             var newEnemy = new Enemy();
+            newEnemy.reset();
             allEnemies.push(newEnemy);
         }
         player.reset();

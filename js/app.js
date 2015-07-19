@@ -24,7 +24,9 @@ var splash_sound = new Howl({
     maxRow = 3,
     allEnemies = [],
     allHearts = [],
-    allGems = [];
+    allGems = [],
+    gemInterval,
+    enemyInterval;
 
 /**
   * @desc creates a countdown timer class for the game
@@ -163,7 +165,11 @@ var gem_handler = function() {
 };
 
 function create_gem_timer() {
-    intervalVar = setInterval(gem_handler, 15000);
+    gemInterval = setInterval(gem_handler, 15000);
+}
+
+function reset_gem_timer() {
+    clearInterval(gemInterval);
 }
 
 //Create scoring
@@ -210,10 +216,16 @@ Enemy.prototype.render = function() {
 var spawn_handler = function() {
     var newEnemy = new Enemy();
     allEnemies.push(newEnemy);
+    console.log("spawn handler running");
 };
 
 function create_spawn_timer() {
-    intervalVar = setInterval(spawn_handler, 20000);
+    enemyInterval = setInterval(spawn_handler, 20000);
+}
+
+function reset_enemy_timer() {
+    clearInterval(enemyInterval);
+    create_spawn_timer();
 }
 
 /**
@@ -240,7 +252,7 @@ Player.prototype.update = function() {
 		this.reset();
         this.lives--;
         collision_sound.play();
-        if (this.lives <= 0) {
+        if (this.lives <= 0) { // This should just check == 0 but there is a bug
             return true;
         }
 	}
@@ -340,11 +352,6 @@ var timer = new Timer(120),
     gem = new Gem(),
     allGems = [gem],
     player = new Player();
-
-for (var i = 0; i < 4; i++) {
-    var newEnemy = new Enemy();
-    allEnemies.push(newEnemy);
-}
 
 // This listens for key presses and sends the keys to the
 // Player.handleInput() method.
