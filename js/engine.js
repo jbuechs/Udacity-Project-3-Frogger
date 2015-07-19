@@ -213,7 +213,7 @@ var Engine = (function(global) {
     }
 
     document.getElementById("button").onclick = function() {
-        init();
+        reset();
     };
 
     /* Go ahead and load all of the images we know we're going to need to
