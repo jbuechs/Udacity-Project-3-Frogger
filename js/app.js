@@ -247,7 +247,8 @@ Player.prototype.update = function() {
         score += 50;
         allGems[gemCollision].reset();
         gem_sound.play();
-        if (score % 250 === 0 && allHearts.length < 3) {
+        // Add heart when you get 1000 points
+        if (score > 1000 && allHearts.length < 2) {
             var newHeart = new Heart();
             allHearts.push(newHeart);
         }

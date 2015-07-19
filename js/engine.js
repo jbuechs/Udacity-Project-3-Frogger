@@ -195,6 +195,8 @@ var Engine = (function(global) {
     }
 
     function reset() {
+        timeOver = false;
+        noLives = false;
         player.lives = 3;
         score = 0;
         maxRow = 3;
@@ -207,13 +209,12 @@ var Engine = (function(global) {
             var newEnemy = new Enemy();
             allEnemies.push(newEnemy);
         }
-        timeOver = false;
-        noLives = false;
         player.reset();
     }
 
     document.getElementById("button").onclick = function() {
         reset();
+        main();
     };
 
     /* Go ahead and load all of the images we know we're going to need to
