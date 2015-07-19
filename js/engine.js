@@ -58,7 +58,7 @@ var Engine = (function(global) {
         /* Use the browser's requestAnimationFrame function to call this
          * function again as soon as the browser is able to draw another frame.
          */
-        if (!timeOver && !noLives) {
+        if (!timeOver && !noLives) {         // Checks to see if game is over
             win.requestAnimationFrame(main);
         }
         else {

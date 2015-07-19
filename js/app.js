@@ -1,4 +1,4 @@
-//Adding sound objects using the howler library
+// Adding sound objects using the howler library
 var splash_sound = new Howl({
         urls: ['sounds/splash.mp3', 'sounds/splash.ogg', 'sounds/splash.wav']
     }),
@@ -17,6 +17,7 @@ var splash_sound = new Howl({
     game_over_sound = new Howl( {
         urls: ['sounds/game-over.mp3', 'sounds/game-over.ogg', 'sounds/game-over.wav']
     }),
+// Variables
     rowY = [51, 132, 213, 294, 375],
     colX = [0, 101, 202, 303, 404],
     maxRow = 3,
@@ -24,8 +25,10 @@ var splash_sound = new Howl({
     allHearts = [],
     allGems = [];
 
-//Adding timer to game
-
+/**
+  * @desc creates a countdown timer class for the game
+  * @param seconds - the number of seconds the game will last
+*/
 var Timer = function(seconds) {
     this.seconds = seconds;
 };
@@ -49,6 +52,7 @@ Timer.prototype.timer_update = function() {
     ctx.font = "20px Arial";
     ctx.fillStyle = "Black";
     ctx.fillText("Time left:", 506, 175);
+    //Draws seconds left. Change colors as time is running out
     if (this.seconds <= 30 && this.seconds > 5) {
         ctx.fillStyle = "Orange";
     }
@@ -59,7 +63,7 @@ Timer.prototype.timer_update = function() {
     return false;
 };
 
-//Create second level
+//Create second level with 60 seconds left by adding row
 var levelUp = function() {
     if (timer.seconds <= 60) {
         maxRow = 4;
@@ -80,13 +84,14 @@ function level_update() {
     }
 }
 
-
 //Helper function to generate random integers
 function getRandomInt(min, max) {
     return Math.floor(Math.random() * (max - min)) + min;
 }
 
-//Add hearts
+/**
+  * @desc creates a heart class for collecting and increasing lives
+*/
 var Heart = function() {
     this.sprite = 'images/Heart.png';
     this.reset();
@@ -105,7 +110,13 @@ Heart.prototype.render = function() {
     ctx.drawImage(Resources.get(this.sprite), this.x + 10, this.y + 60, 80, 100);
 };
 
-//Add gems
+Heart.prototype.wait_time = function() {
+
+}
+
+/**
+  * @desc creates a gem class for collecting and increasing score
+*/
 var Gem = function() {
     this.sprite = 'images/Gem Blue.png';
     this.reset();
@@ -114,15 +125,6 @@ var Gem = function() {
 Gem.prototype.reset = function() {
     this.x = colX[getRandomInt(0, 5)];
     this.y = rowY[getRandomInt(0, maxRow)];
-/*
-At this point in the program, I want to check to see whether there is already a gem
-at this location. I have created this check_repeat function which I have tested in the
-console and it works as I wanted - returns true if there is already a gem in that location
-and false if there is not. The while loop is throwing an error. I think it has something to
-do with the allGems array - maybe it's not defined yet, maybe something to do with scope?
-I thought allGems was in the global scope but when I try to access it I get an error.
-Not sure. Confused. Would appreciate help!
-*/
     while (this.check_repeat(allGems)) {
         this.reset();
     }
@@ -137,7 +139,8 @@ Gem.prototype.render = function() {
     ctx.drawImage(Resources.get(this.sprite), this.x + 10, this.y + 60, 80, 100);
 };
 
-//Checks if this gem is on the same space as other gems
+// Checks if this gem is on the same space as other gems
+// to prevent multiple gems on the same space
 Gem.prototype.check_repeat = function(objArray) {
     for (var i = 0, len = objArray.length; i < len; i++) {
         if (this !== objArray[i] &&
@@ -169,7 +172,9 @@ function score_update() {
     ctx.fillText(score, 580, 300);
 }
 
-// Enemies our player must avoid
+/**
+  * @desc creates an enemy class the player must avoid
+*/
 var Enemy = function() {
     this.reset();
     this.sprite = 'images/enemy-bug.png';
@@ -181,7 +186,7 @@ Enemy.prototype.reset = function() {
     this.y = rowY[getRandomInt(0, maxRow)];
 };
 
-// Update the enemy's position, required method for game
+// Update the enemy's position
 // Parameter: dt, a time delta between ticks
 Enemy.prototype.update = function(dt) {
     this.x = this.x + this.speed * dt;
@@ -190,7 +195,7 @@ Enemy.prototype.update = function(dt) {
     }
 };
 
-// Draw the enemy on the screen, required method for game
+// Draw the enemy on the screen
 Enemy.prototype.render = function() {
     ctx.drawImage(Resources.get(this.sprite), this.x, this.y);
 };
@@ -205,7 +210,9 @@ function create_spawn_timer() {
     intervalVar = setInterval(spawn_handler, 20000);
 }
 
-//Player Class
+/**
+  * @desc creates a player class
+*/
 
 var Player = function() {
     this.reset();
@@ -221,6 +228,7 @@ Player.prototype.reset = function() {
 };
 
 Player.prototype.update = function() {
+    // Check enemy collisions
 	var enemyCollisions = this.checkCollisions(allEnemies);
     if(enemyCollisions >= 0) {
 		this.reset();
@@ -230,6 +238,7 @@ Player.prototype.update = function() {
             return true;
         }
 	}
+    // Check gem collisions
     var gemCollision = this.checkCollisions(allGems);
     if(gemCollision >=0) {
         score += 50;
@@ -240,6 +249,7 @@ Player.prototype.update = function() {
             allHearts.push(newHeart);
         }
     }
+    // Check heart collisions
     var heartCollision = this.checkCollisions(allHearts);
     if (heartCollision >=0) {
         heart_sound.play();
@@ -251,6 +261,7 @@ Player.prototype.update = function() {
     return false;
 };
 
+// Shows number of lives by drawing hearts on screen
 Player.prototype.lives_render = function() {
     ctx.fillStyle = "white";
     ctx.fillRect(505, 480, 700, 550);
@@ -260,11 +271,13 @@ Player.prototype.lives_render = function() {
     ctx.drawImage(Resources.get('images/heart_lives_small.png'), 0, 0, this.lives * 20, 20, 506, 500, this.lives * 20, 20);
 };
 
+// Draws player on the canvas
 Player.prototype.render = function() {
     ctx.drawImage(Resources.get(this.sprite), this.x, this.y);
     this.lives_render();
 };
 
+// Input handler for pressing arrow keys
 Player.prototype.handleInput = function(key) {
     switch (key) {
         case 'left':
@@ -302,6 +315,8 @@ Player.prototype.handleInput = function(key) {
     }
 };
 
+// @desc Function checks whether player collides with other objects
+// @param objArray an array of objects to check for collisions - enemies, gems, or hearts
 Player.prototype.checkCollisions = function(objArray) {
     for (var i = 0, len = objArray.length; i < len; i++) {
         if (this.y === objArray[i].y &&
@@ -313,9 +328,7 @@ Player.prototype.checkCollisions = function(objArray) {
     return -1;
 };
 
-// Now instantiate your objects.
-// Place all enemy objects in an array called allEnemies
-// Place the player object in a variable called player
+// Instantiating objects.
 var timer = new Timer(120),
     gem = new Gem(),
     allGems = [gem],
@@ -326,8 +339,8 @@ for (var i = 0; i < 4; i++) {
     allEnemies.push(newEnemy);
 }
 
-// This listens for key presses and sends the keys to your
-// Player.handleInput() method. You don't need to modify this.
+// This listens for key presses and sends the keys to the
+// Player.handleInput() method.
 document.addEventListener('keyup', function(e) {
     var allowedKeys = {
         37: 'left',
