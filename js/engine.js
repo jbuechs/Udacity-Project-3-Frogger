@@ -195,15 +195,15 @@ var Engine = (function(global) {
         if (score > high_score) {
                 high_score = score;
             }
-        timeOver = false,
-        noLives = false,
-        player.lives = 3,
-        score = 0,
-        maxRow = 3,
-        allHearts = [],
-        allEnemies = [],
-        gem = new Gem(),
-        allGems = [gem],
+        timeOver = false;
+        noLives = false;
+        player.lives = 3;
+        score = 0;
+        maxRow = 3;
+        allHearts = [];
+        allEnemies = [];
+        gem = new Gem();
+        allGems = [gem];
         timer.seconds = 120;
         reset_gem_timer();
         reset_enemy_timer();
