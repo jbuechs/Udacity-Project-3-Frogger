@@ -20,6 +20,7 @@ var splash_sound = new Howl({
 // Variables
     rowY = [51, 132, 213, 294, 375],
     colX = [0, 101, 202, 303, 404],
+    high_score = 0,
     maxRow = 3,
     allEnemies = [],
     allHearts = [],
@@ -173,6 +174,8 @@ function score_update() {
     ctx.fillStyle = "Black";
     ctx.fillText("Score:", 506, 300);
     ctx.fillText(score, 580, 300);
+    ctx.fillText("High Score:", 506, 350);
+    ctx.fillText(high_score, 550, 375);
 }
 
 /**

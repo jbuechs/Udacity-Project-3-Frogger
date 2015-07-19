@@ -62,6 +62,9 @@ var Engine = (function(global) {
             win.requestAnimationFrame(main);
         }
         else {
+            if (score > high_score) {
+                high_score = score;
+            }
             ctx.drawImage(Resources.get('images/GameOver.png'), 0, 150);
             game_over_sound.play();
         }
