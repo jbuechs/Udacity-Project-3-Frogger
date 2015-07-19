@@ -100,6 +100,7 @@ var Heart = function() {
 Heart.prototype.reset = function() {
     this.x = colX[getRandomInt(0, 5)];
     this.y = rowY[getRandomInt(0, maxRow)];
+    clearInterval(this.intervalVar);
 };
 
 Heart.prototype.update = function() {
@@ -110,9 +111,11 @@ Heart.prototype.render = function() {
     ctx.drawImage(Resources.get(this.sprite), this.x + 10, this.y + 60, 80, 100);
 };
 
-Heart.prototype.wait_time = function() {
-
-}
+// After collision, creates 5 sec wait time before heart reappears
+Heart.prototype.deactivate = function() {
+    this.x = 5000;      // Moves heart off screen
+    this.intervalVar = setInterval(this.reset.bind(this), 5000);
+};
 
 /**
   * @desc creates a gem class for collecting and increasing score
@@ -213,7 +216,6 @@ function create_spawn_timer() {
 /**
   * @desc creates a player class
 */
-
 var Player = function() {
     this.reset();
     this.sprite = 'images/char-pink-girl.png';
@@ -253,7 +255,7 @@ Player.prototype.update = function() {
     var heartCollision = this.checkCollisions(allHearts);
     if (heartCollision >=0) {
         heart_sound.play();
-        allHearts[heartCollision].reset();
+        allHearts[heartCollision].deactivate();
         if (this.lives < 5) {
                 this.lives++;
         }
