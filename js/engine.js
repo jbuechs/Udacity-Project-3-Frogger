@@ -27,7 +27,7 @@ var Engine = (function(global) {
         noLives = false,
         lastTime;
 
-    canvas.width = 808;
+    canvas.width = 650;
     canvas.height = 606;
     doc.body.appendChild(canvas);
 
@@ -62,9 +62,6 @@ var Engine = (function(global) {
             win.requestAnimationFrame(main);
         }
         else {
-            if (score > high_score) {
-                high_score = score;
-            }
             ctx.drawImage(Resources.get('images/GameOver.png'), 0, 150);
             game_over_sound.play();
         }
@@ -109,7 +106,8 @@ var Engine = (function(global) {
             enemy.update(dt);
         });
         noLives = player.update();
-        console.log(noLives);
+        //console.log(noLives);
+        //console.log(timeOver);
     }
 
     /* This function initially draws the "game level", it will then call
@@ -198,13 +196,16 @@ var Engine = (function(global) {
     }
 
     function reset() {
-        timeOver = false;
-        noLives = false;
-        player.lives = 3;
-        score = 0;
-        maxRow = 3;
-        allEnemies = [];
-        allHearts = [];
+        if (score > high_score) {
+                high_score = score;
+            }
+        timeOver = false,
+        noLives = false,
+        player.lives = 3,
+        score = 0,
+        maxRow = 3,
+        allEnemies = [],
+        allHearts = [],
         gem = new Gem(),
         allGems = [gem],
         timer.seconds = 120;
